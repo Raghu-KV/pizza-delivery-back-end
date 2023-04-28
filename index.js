@@ -5,7 +5,7 @@ import cors from "cors";
 
 const app = express();
 dotenv.config();
-const PORT = process.env.PORT;
+const PORTT = process.env.PORT;
 
 //connecting mongo db ________________________
 const MONGO_URL = process.env.MONGO_URL;
@@ -31,4 +31,4 @@ app.get("/products", async (req, res) => {
   res.send(allProducts);
 });
 
-app.listen(PORT, () => console.log(`listening to PORT : ${PORT}`));
+app.listen(PORT, () => console.log(`listening to PORT : ${PORTT}`));
