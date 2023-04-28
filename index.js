@@ -31,4 +31,4 @@ app.get("/products", async (req, res) => {
   res.send(allProducts);
 });
 
-app.listen(PORT, () => console.log(`listening to PORT : ${PORTT}`));
+app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
