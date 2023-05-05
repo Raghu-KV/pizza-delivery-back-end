@@ -31,4 +31,25 @@ app.get("/products", async (req, res) => {
   res.send(allProducts);
 });
 
+app.post("/register", async (req, res) => {
+  const data = req.body;
+  const checkUserName = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ userName: data.userName });
+  const checkEmail = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ email: data.email });
+  console.log(checkEmail, checkUserName);
+
+  if (checkUserName || checkEmail) {
+    res.status(401).send({ message: "userName or email already exits" });
+  } else if (data.password.length < 7) {
+    res
+      .status(401)
+      .send({ message: "password should be at least 8 character" });
+  }
+});
+
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
