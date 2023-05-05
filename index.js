@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 import cors from "cors";
+import bcrypt from "bcrypt";
 
 const app = express();
 dotenv.config();
@@ -49,6 +50,11 @@ app.post("/register", async (req, res) => {
     res
       .status(401)
       .send({ message: "password should be at least 8 character" });
+  } else {
+    // ### HASH PASSWORD ###
+    const password = data.password;
+    const NO_OF_ROUNDS = 10;
+    const salt = await bcrypt.genSalt(NO_OF_ROUNDS);
   }
 });
 
