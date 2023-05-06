@@ -55,6 +55,20 @@ app.post("/register", async (req, res) => {
     const password = data.password;
     const NO_OF_ROUNDS = 10;
     const salt = await bcrypt.genSalt(NO_OF_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const updatedData = {
+      ...data,
+      password: hashedPassword,
+      isVerified: true,
+      isAdmin: true,
+    };
+
+    const storedData = await client
+      .db("pizza-delevery")
+      .collection("users")
+      .insertOne(updatedData);
+    res.send(storedData);
   }
 });
 
