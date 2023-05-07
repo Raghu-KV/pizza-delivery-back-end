@@ -3,6 +3,10 @@ import * as dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 import cors from "cors";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
+
+import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 
 const app = express();
 dotenv.config();
@@ -17,6 +21,9 @@ console.log("mongodb connected");
 
 app.use(express.json());
 app.use(cors());
+
+const BACK_END_URL = "http://localhost:4000";
+const FRONT_END_URL = "http://localhost:3000";
 
 app.get("/", (req, res) => {
   res.send({ message: "express working successfully" });
@@ -34,10 +41,12 @@ app.get("/products", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   const data = req.body;
+
   const checkUserName = await client
     .db("pizza-delevery")
     .collection("users")
     .findOne({ userName: data.userName });
+
   const checkEmail = await client
     .db("pizza-delevery")
     .collection("users")
@@ -60,16 +69,62 @@ app.post("/register", async (req, res) => {
     const updatedData = {
       ...data,
       password: hashedPassword,
-      isVerified: true,
-      isAdmin: true,
+      isVerified: false,
+      isAdmin: false,
     };
 
     const storedData = await client
       .db("pizza-delevery")
       .collection("users")
       .insertOne(updatedData);
-    res.send(storedData);
+
+    // SETTING UP NODE MAILER --------------------------------
+    const config = {
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL,
+        pass: process.env.PASSWORD,
+      },
+    };
+
+    const transpoter = nodemailer.createTransport(config);
+
+    const message = {
+      from: process.env.GMAIL,
+      to: data.email,
+      subject: "verification link",
+      text: `${FRONT_END_URL}/accountVerify/${storedData.insertedId}`,
+      html: `<h3>please click the link to verify your account</h3> <p><a href="${FRONT_END_URL}/accountVerify/${storedData.insertedId}">${FRONT_END_URL}/accountVerify/${storedData.insertedId} </a></p>`,
+    };
+
+    await transpoter.sendMail(message);
+    res.send({ message: "verification link is sent to your email" });
   }
 });
 
+app.put("/accountVerify/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    //console.log(id);
+    const token = jwt.sign({ id: id }, process.env.SECRET);
+    const updateUser = await client
+      .db("pizza-delevery")
+      .collection("users")
+      .updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { isVerified: true, token: token } }
+      );
+    if (updateUser.matchedCount === 1) {
+      res.send({
+        message: "account verified successfully",
+        token: token,
+        isAdmin: false,
+      });
+    } else {
+      res.send({ message: "could not find the object id verification faild" });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
