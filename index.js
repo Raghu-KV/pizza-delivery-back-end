@@ -152,10 +152,10 @@ app.post("/signIn", async (req, res) => {
 
     const message = {
       from: process.env.GMAIL,
-      to: data.email,
+      to: checkUser.email,
       subject: "verification link",
-      text: `${FRONT_END_URL}/accountVerify/${storedData.insertedId}`,
-      html: `<h3>please click the link to verify your account</h3> <p><a href="${FRONT_END_URL}/accountVerify/${storedData.insertedId}">${FRONT_END_URL}/accountVerify/${storedData.insertedId} </a></p>`,
+      text: `${FRONT_END_URL}/accountVerify/${checkUser._id}`,
+      html: `<h3>please click the link to verify your account</h3> <p><a href="${FRONT_END_URL}/accountVerify/${checkUser._id}">${FRONT_END_URL}/accountVerify/${checkUser._id} </a></p>`,
     };
 
     await transpoter.sendMail(message);
@@ -177,7 +177,11 @@ app.post("/signIn", async (req, res) => {
           { $set: { token: token } }
         );
 
-      res.send({ message: "successful sign in", token: token });
+      res.send({
+        message: "successful sign in",
+        token: token,
+        isAdmin: checkUser.isAdmin,
+      });
     } else {
       res.send({ message: "invalid crenditles p" });
     }
