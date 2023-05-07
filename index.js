@@ -127,4 +127,60 @@ app.put("/accountVerify/:id", async (req, res) => {
     res.send(error);
   }
 });
+
+app.post("/signIn", async (req, res) => {
+  const data = req.body;
+
+  const checkUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ userName: data.userName });
+  //console.log(checkUser);
+
+  if (!checkUser) {
+    res.send({ message: "invalid crenditals u" });
+  } else if (!checkUser.isVerified) {
+    const config = {
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL,
+        pass: process.env.PASSWORD,
+      },
+    };
+
+    const transpoter = nodemailer.createTransport(config);
+
+    const message = {
+      from: process.env.GMAIL,
+      to: data.email,
+      subject: "verification link",
+      text: `${FRONT_END_URL}/accountVerify/${storedData.insertedId}`,
+      html: `<h3>please click the link to verify your account</h3> <p><a href="${FRONT_END_URL}/accountVerify/${storedData.insertedId}">${FRONT_END_URL}/accountVerify/${storedData.insertedId} </a></p>`,
+    };
+
+    await transpoter.sendMail(message);
+    res.send({
+      message: "Account not verified! verification link is sent to your email",
+    });
+  } else {
+    const db_password = checkUser.password;
+    const passwordCheck = await bcrypt.compare(data.password, db_password);
+
+    if (passwordCheck) {
+      const token = jwt.sign({ id: checkUser._id }, process.env.SECRET);
+
+      await client
+        .db("pizza-delevery")
+        .collection("users")
+        .updateOne(
+          { id: new ObjectId(checkUser._id) },
+          { $set: { token: token } }
+        );
+
+      res.send({ message: "successful sign in", token: token });
+    } else {
+      res.send({ message: "invalid crenditles p" });
+    }
+  }
+});
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
