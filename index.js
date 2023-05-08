@@ -7,7 +7,7 @@ import { ObjectId } from "mongodb";
 
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
-
+import { auth } from "./middleware/auth.js";
 const app = express();
 dotenv.config();
 const PORTT = process.env.PORT;
@@ -185,6 +185,72 @@ app.post("/signIn", async (req, res) => {
     } else {
       res.send({ message: "invalid crenditles p" });
     }
+  }
+});
+
+app.post("/forgetPassword", async (req, res) => {
+  const { email } = req.body;
+
+  const findTheUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ email: email });
+
+  if (!findTheUser) {
+    res.send({ message: "we could not find any user with that email" });
+  } else {
+    const token = jwt.sign({ id: findTheUser._id }, process.env.SECRET, {
+      expiresIn: "10m",
+    });
+
+    const config = {
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL,
+        pass: process.env.PASSWORD,
+      },
+    };
+
+    const transpoter = nodemailer.createTransport(config);
+
+    const message = {
+      from: process.env.GMAIL,
+      to: findTheUser.email,
+      subject: "verification link",
+      text: `${FRONT_END_URL}/accountRecovery/${findTheUser._id}/${token}`,
+      html: `<h3>please click the link to change your account password</h3> <p><a href="${FRONT_END_URL}/accountRecovery/${findTheUser._id}/${token}">${FRONT_END_URL}/accountRecovery/${findTheUser._id}/${token} </a></p>`,
+    };
+
+    await transpoter.sendMail(message);
+
+    res.send({
+      message:
+        "Password reset link has been sent to your email the link expires in 10 minutes",
+    });
+  }
+});
+
+app.post("/accountRecovery", auth, async (req, res) => {
+  const data = req.body;
+  const findAccount = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ _id: new ObjectId(data.userID) });
+
+  if (findAccount) {
+    const NO_OF_ROUNDS = 10;
+    const salt = await bcrypt.genSalt(NO_OF_ROUNDS);
+    const hashedPassword = await bcrypt.hash(data.newPassword, salt);
+    await client
+      .db("pizza-delevery")
+      .collection("users")
+      .updateOne(
+        { _id: new ObjectId(data.userID) },
+        { $set: { password: hashedPassword } }
+      );
+    res.send({ message: "password changed successfully" });
+  } else {
+    res.send({ message: "we could not find the account" });
   }
 });
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
