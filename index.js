@@ -4,6 +4,8 @@ import { MongoClient } from "mongodb";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import { ObjectId } from "mongodb";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
@@ -253,4 +255,45 @@ app.post("/accountRecovery", auth, async (req, res) => {
     res.send({ message: "we could not find the account" });
   }
 });
+
+//razorpay connection __________________________________________
+
+app.post("/orders", async (req, res) => {
+  const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY,
+    key_secret: process.env.RAZORPAY_SECRET,
+  });
+  const options = {
+    amount: 1000 * 100,
+    currency: "INR",
+    receipt: "some text",
+  };
+  instance.orders.create(options, (error, order) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: "something went wrong" });
+    } else {
+      console.log(order);
+      res.send(order);
+    }
+  });
+});
+
+app.post("/verify", async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
+  const sign = razorpay_order_id + "|" + razorpay_payment_id;
+  const expectedSign = crypto
+    .createHmac("sha256", process.env.RAZORPAY_SECRET)
+    .update(sign.toString())
+    .digest("hex");
+
+  if (razorpay_signature === expectedSign) {
+    res.send({ message: "payment verified" });
+  } else {
+    res.status(401).send({ message: "invalid signature" });
+  }
+});
+
+//razorpay connection ended_____________________________________
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
