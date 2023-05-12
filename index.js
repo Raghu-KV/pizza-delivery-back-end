@@ -264,7 +264,7 @@ app.post("/orders", async (req, res) => {
     key_secret: process.env.RAZORPAY_SECRET,
   });
   const options = {
-    amount: 1000 * 100,
+    amount: 10000 * 100,
     currency: "INR",
     receipt: "some text",
   };
