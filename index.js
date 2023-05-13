@@ -259,12 +259,31 @@ app.post("/accountRecovery", auth, async (req, res) => {
 //razorpay connection __________________________________________
 
 app.post("/orders", async (req, res) => {
+  //finding the price and qunntity of the products
+  const body = req.body;
+  console.log(body);
+
+  let totalPriceWithOutTax = 0;
+  for (let i = 0; i < body.length; i++) {
+    const single = await client
+      .db("pizza-delevery")
+      .collection("products")
+      .findOne({ name: body[i].name });
+    totalPriceWithOutTax += single.price * body[i].quantity;
+  }
+
+  const calcGST = (totalPriceWithOutTax * 5) / 100;
+  const amountWithGST = totalPriceWithOutTax + calcGST;
+  // console.log(totalPriceWithOutTax, "line 277");
+  // console.log(amountWithGST, "line 278");
+
+  //-------------
   const instance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY,
     key_secret: process.env.RAZORPAY_SECRET,
   });
   const options = {
-    amount: 10000 * 100,
+    amount: amountWithGST * 100,
     currency: "INR",
     receipt: "some text",
   };
