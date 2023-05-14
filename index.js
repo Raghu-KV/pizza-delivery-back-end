@@ -299,9 +299,14 @@ app.post("/razorpay/orders", async (req, res) => {
 });
 
 app.post("/razorpay/verify", async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, token } =
-    req.body;
-  //console.log(token, "line 304");
+  const {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    token,
+    cart,
+  } = req.body;
+  console.log(cart, "line 304");
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSign = crypto
     .createHmac("sha256", process.env.RAZORPAY_SECRET)
