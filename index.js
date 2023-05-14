@@ -258,7 +258,7 @@ app.post("/accountRecovery", auth, async (req, res) => {
 
 //razorpay connection __________________________________________
 
-app.post("/orders", async (req, res) => {
+app.post("/razorpay/orders", async (req, res) => {
   //finding the price and qunntity of the products
   const body = req.body;
   console.log(body);
@@ -298,9 +298,10 @@ app.post("/orders", async (req, res) => {
   });
 });
 
-app.post("/verify", async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+app.post("/razorpay/verify", async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, token } =
     req.body;
+  //console.log(token, "line 304");
   const sign = razorpay_order_id + "|" + razorpay_payment_id;
   const expectedSign = crypto
     .createHmac("sha256", process.env.RAZORPAY_SECRET)
