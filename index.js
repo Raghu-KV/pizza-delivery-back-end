@@ -175,7 +175,7 @@ app.post("/signIn", async (req, res) => {
         .db("pizza-delevery")
         .collection("users")
         .updateOne(
-          { id: new ObjectId(checkUser._id) },
+          { _id: new ObjectId(checkUser._id) },
           { $set: { token: token } }
         );
 
@@ -314,7 +314,37 @@ app.post("/razorpay/verify", async (req, res) => {
     .digest("hex");
 
   if (razorpay_signature === expectedSign) {
+    const paidUser = await client
+      .db("pizza-delevery")
+      .collection("users")
+      .findOne({ token: token });
+    console.log(paidUser, "line 321");
+
+    const createDataForOrdersCollection = {
+      paidUser: paidUser.userName,
+      paidUser_id: new ObjectId(paidUser._id),
+      razorpay_order_id: razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature: razorpay_signature,
+      orders: cart,
+    };
+
+    await client
+      .db("pizza-delevery")
+      .collection("paid-orders")
+      .insertOne(createDataForOrdersCollection);
+
     res.send({ message: "payment verified" });
+
+    for (let i = 0; i < cart.length; i++) {
+      await client
+        .db("pizza-delevery")
+        .collection("products")
+        .updateOne(
+          { name: cart[i].name },
+          { $inc: { countInStock: -cart[i].quantity } }
+        );
+    }
   } else {
     res.status(401).send({ message: "invalid signature" });
   }
