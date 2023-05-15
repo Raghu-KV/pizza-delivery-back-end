@@ -39,6 +39,9 @@ app.get("/products", async (req, res) => {
     .toArray();
 
   res.send(allProducts);
+
+  const lowInStock = allProducts.filter((product) => product.countInStock < 5);
+  console.log(lowInStock, "line 44");
 });
 
 app.post("/register", async (req, res) => {
