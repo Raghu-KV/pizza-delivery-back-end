@@ -99,7 +99,7 @@ app.post("/register", async (req, res) => {
       to: data.email,
       subject: "verification link",
       text: `${FRONT_END_URL}/accountVerify/${storedData.insertedId}`,
-      html: `<h3>please click the link to verify your account</h3> <p><a href="${FRONT_END_URL}/accountVerify/${storedData.insertedId}">${FRONT_END_URL}/accountVerify/${storedData.insertedId} </a></p>`,
+      html: `<h3>please click the link to verify your account</h3> <p><a href="${FRONT_END_URL}/accountVerify/${storedData.insertedId}"> ${FRONT_END_URL}/accountVerify/${storedData.insertedId} </a></p>`,
     };
 
     await transpoter.sendMail(message);
@@ -183,6 +183,7 @@ app.post("/signIn", async (req, res) => {
         );
 
       res.send({
+        userId: checkUser._id,
         message: "successful sign in",
         token: token,
         isAdmin: checkUser.isAdmin,
@@ -354,4 +355,15 @@ app.post("/razorpay/verify", async (req, res) => {
 });
 
 //razorpay connection ended_____________________________________
+
+app.get("/orders/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const findOrders = await client
+    .db("pizza-delevery")
+    .collection("paid-orders")
+    .find({ paidUser_id: new ObjectId(userId) })
+    .toArray();
+
+  res.send(findOrders);
+});
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
