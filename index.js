@@ -367,4 +367,33 @@ app.get("/orders/:userId", async (req, res) => {
 
   res.send(findOrders);
 });
+
+//ADMIN OPRATIONS_______________________________________
+
+app.post("/addProduct", auth, async (req, res) => {
+  try {
+    const token = req.header("x-auth-token");
+    const productData = req.body;
+    console.log(productData);
+
+    const findTheUser = await client
+      .db("pizza-delevery")
+      .collection("users")
+      .findOne({ token: token });
+
+    console.log(findTheUser);
+
+    if (findTheUser.isAdmin) {
+      await client
+        .db("pizza-delevery")
+        .collection("products")
+        .insertOne(productData);
+      res.send({ message: "product inserted" });
+    } else {
+      res.status(401).send({ message: "Unauthorized Access" });
+    }
+  } catch (error) {
+    res.status(401).send({ ...error, message: "something went wrong" });
+  }
+});
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
