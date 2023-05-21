@@ -396,4 +396,45 @@ app.post("/addProduct", auth, async (req, res) => {
     res.status(401).send({ ...error, message: "something went wrong" });
   }
 });
+
+app.delete("/deleteProduct/:id", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const { id } = req.params;
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    await client
+      .db("pizza-delevery")
+      .collection("products")
+      .deleteOne({ _id: new ObjectId(id) });
+    res.send({ message: "updated successfully" });
+  } else {
+    res.status(401).send({ message: "you dont have access to do this" });
+  }
+});
+
+app.post("/editProduct/:id", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const { id } = req.params;
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    await client
+      .db("pizza-delevery")
+      .collection("products")
+      .updateOne({ _id: new ObjectId(id) }, { $set: body });
+    res.send({ message: "updated successfully" });
+  } else {
+    res.status(401).send({ message: "you dont have access to do this" });
+  }
+});
+
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
