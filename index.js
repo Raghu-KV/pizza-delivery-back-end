@@ -437,4 +437,25 @@ app.post("/editProduct/:id", auth, async (req, res) => {
   }
 });
 
+app.get("/admin/allOrders", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const query = req.query;
+    const allOrders = await client
+      .db("pizza-delevery")
+      .collection("paid-orders")
+      .find(query)
+      .toArray();
+    res.send(allOrders);
+  } else {
+    res.status(401).send({ message: "your are unauthorized to do it" });
+  }
+});
+
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
