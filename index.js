@@ -458,4 +458,27 @@ app.get("/admin/allOrders", auth, async (req, res) => {
   }
 });
 
+app.post("/changeStatus", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const updateStatus = await client
+      .db("pizza-delevery")
+      .collection("paid-orders")
+      .updateOne(
+        { _id: new ObjectId(body.id) },
+        { $set: { orderStatus: body.status } }
+      );
+
+    res.send({ message: "updated the status" });
+  } else {
+    res.status(401).send({ message: "your are unauthorized to do it" });
+  }
+});
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
