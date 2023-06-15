@@ -484,7 +484,8 @@ app.post("/changeStatus", auth, async (req, res) => {
 
 app.post("/customPizza", async (req, res) => {
   const body = req.body;
-  console.log(body);
+  //console.log(body);
+  res.send(body);
 });
 
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
@@ -496,12 +497,12 @@ app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
 //       {
 
 //         "pizzaBase": "Hand Tossed Crust",
-//         "price": 20,
+//         "price": 20
 //       },
 //       { "pizzaBase": "Handmade Crust", "price": 30 },
 //       { "pizzaBase": "Brooklyn Crust", "price": 40 },
-//       {  "pizzaBase": "Indian Crust", "price": 50 },
-//     ],
+//       {  "pizzaBase": "Indian Crust", "price": 50 }
+//     ]
 //   },
 //   {
 //     "allPizzaSauces": [
@@ -509,25 +510,25 @@ app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
 //       {  "pizzaSauce": "Tomato sauce", "price": 20 },
 //       {  "pizzaSauce": "Hummus sauce", "price": 30 },
 //       {  "pizzaSauce": "Buffalo Sauce", "price": 40 },
-//       {  "pizzaSauce": "Green sauce", "price": 50 },
-//     ],
+//       {  "pizzaSauce": "Green sauce", "price": 50 }
+//     ]
 //   },
 //   {
 //     "allPizzaCheese": [
 //       {  "pizzaCheese": "White Cheese", "price": 10 },
 //       {
 //         "pizzaCheese": "Yellow Cheese",
-//         "price": 20,
+//         "price": 20
 //       },
 //       {
 //         "pizzaCheese": "Mozzarella Cheese",
-//         "price": 30,
+//         "price": 30
 //       },
 //       {
 //         "pizzaCheese": "Gorgonzola Cheese",
-//         "price": 40,
-//       },
-//     ],
+//         "price": 40
+//       }
+//     ]
 //   },
 
 //   {
@@ -537,15 +538,15 @@ app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
 //       {  "veggies": "fresh peppers", "price": 30 },
 //       {  "veggies": "Mushrooms", "price": 40 },
 //       {  "veggies": "Broccoli", "price": 50 },
-//       {  "veggies": "Roasted garlic", "price": 60 },
-//     ],
+//       {  "veggies": "Roasted garlic", "price": 60 }
+//     ]
 //   },
 
 //   {
 //     "allMeat": [
 //       {  "meat": "Italian sausage", "price": 10 },
 //       {  "meat": "Canadian bacon", "price": 20 },
-//       { "meat": "Indian chicken", "price": 30 },
-//     ],
-//   },
-// ];
+//       { "meat": "Indian chicken", "price": 30 }
+//     ]
+//   }
+// ]
