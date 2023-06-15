@@ -482,73 +482,70 @@ app.post("/changeStatus", auth, async (req, res) => {
   }
 });
 
+app.post("/customPizza", async (req, res) => {
+  const body = req.body;
+  console.log(body);
+});
+
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
 
 // [
 //   {
-//     _id: new ObjectId(),
-//     allPizzaBases: [
-//       { pizzaBaseId: new ObjectId(), pizzaBase: "Thin Crust", price: 10 },
+//     "allPizzaBases": [
+//       {  "pizzaBase": "Thin Crust", "price": 10 },
 //       {
-//         pizzaBaseId: new ObjectId(),
-//         pizzaBase: "Hand Tossed Crust",
-//         price: 20,
+
+//         "pizzaBase": "Hand Tossed Crust",
+//         "price": 20,
 //       },
-//       { pizzaBaseId: new ObjectId(), pizzaBase: "Handmade Crust", price: 30 },
-//       { pizzaBaseId: new ObjectId(), pizzaBase: "Brooklyn Crust", price: 40 },
-//       { pizzaBaseId: new ObjectId(), pizzaBase: "Indian Crust", price: 50 },
+//       { "pizzaBase": "Handmade Crust", "price": 30 },
+//       { "pizzaBase": "Brooklyn Crust", "price": 40 },
+//       {  "pizzaBase": "Indian Crust", "price": 50 },
 //     ],
 //   },
 //   {
-//     _id: new ObjectId(),
-//     allPizzaSauces: [
-//       { pizzaSauceId: new ObjectId(), pizzaSauce: "Pesto sauce", price: 10 },
-//       { pizzaSauceId: new ObjectId(), pizzaSauce: "Tomato sauce", price: 20 },
-//       { pizzaSauceId: new ObjectId(), pizzaSauce: "Hummus sauce", price: 30 },
-//       { pizzaSauceId: new ObjectId(), pizzaSauce: "Buffalo Sauce", price: 40 },
-//       { pizzaSauceId: new ObjectId(), pizzaSauce: "Green sauce", price: 50 },
+//     "allPizzaSauces": [
+//       { "pizzaSauce": "Pesto sauce", "price": 10 },
+//       {  "pizzaSauce": "Tomato sauce", "price": 20 },
+//       {  "pizzaSauce": "Hummus sauce", "price": 30 },
+//       {  "pizzaSauce": "Buffalo Sauce", "price": 40 },
+//       {  "pizzaSauce": "Green sauce", "price": 50 },
 //     ],
 //   },
 //   {
-//     _id: new ObjectId(),
-//     allPizzaCheese: [
-//       { pizzaCheeseId: new ObjectId(), pizzaCheese: "White Cheese", price: 10 },
+//     "allPizzaCheese": [
+//       {  "pizzaCheese": "White Cheese", "price": 10 },
 //       {
-//         pizzaCheeseId: new ObjectId(),
-//         pizzaCheese: "Yellow Cheese",
-//         price: 20,
+//         "pizzaCheese": "Yellow Cheese",
+//         "price": 20,
 //       },
 //       {
-//         pizzaCheeseId: new ObjectId(),
-//         pizzaCheese: "Mozzarella Cheese",
-//         price: 30,
+//         "pizzaCheese": "Mozzarella Cheese",
+//         "price": 30,
 //       },
 //       {
-//         pizzaCheeseId: new ObjectId(),
-//         pizzaCheese: "Gorgonzola Cheese",
-//         price: 40,
+//         "pizzaCheese": "Gorgonzola Cheese",
+//         "price": 40,
 //       },
 //     ],
 //   },
 
 //   {
-//     _id: new ObjectId(),
-//     allVeggies: [
-//       { veggiesId: new ObjectId(), veggies: "Onions", price: 10 },
-//       { veggiesId: new ObjectId(), veggies: "Red onions", price: 20 },
-//       { veggiesId: new ObjectId(), veggies: "fresh peppers", price: 30 },
-//       { veggiesId: new ObjectId(), veggies: "Mushrooms", price: 40 },
-//       { veggiesId: new ObjectId(), veggies: "Broccoli", price: 50 },
-//       { veggiesId: new ObjectId(), veggies: "Roasted garlic", price: 60 },
+//     "allVeggies": [
+//       {  "veggies": "Onions", "price": 10 },
+//       {  "veggies": "Red onions", "price": 20 },
+//       {  "veggies": "fresh peppers", "price": 30 },
+//       {  "veggies": "Mushrooms", "price": 40 },
+//       {  "veggies": "Broccoli", "price": 50 },
+//       {  "veggies": "Roasted garlic", "price": 60 },
 //     ],
 //   },
 
 //   {
-//     _id: new ObjectId(),
-//     allMeat: [
-//       { meatId: new ObjectId(), meat: "Italian sausage", price: 10 },
-//       { meatId: new ObjectId(), meat: "Canadian bacon", price: 20 },
-//       { meatId: new ObjectId(), meat: "Indian chicken", price: 30 },
+//     "allMeat": [
+//       {  "meat": "Italian sausage", "price": 10 },
+//       {  "meat": "Canadian bacon", "price": 20 },
+//       { "meat": "Indian chicken", "price": 30 },
 //     ],
 //   },
 // ];
