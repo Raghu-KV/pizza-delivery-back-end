@@ -482,10 +482,13 @@ app.post("/changeStatus", auth, async (req, res) => {
   }
 });
 
-app.post("/customPizza", async (req, res) => {
-  const body = req.body;
-  //console.log(body);
-  res.send(body);
+app.get("/customPizza", async (req, res) => {
+  const data = await client
+    .db("pizza-delevery")
+    .collection("custom-pizza")
+    .find({})
+    .toArray();
+  res.send(data);
 });
 
 app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
