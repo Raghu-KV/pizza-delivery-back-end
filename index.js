@@ -496,60 +496,64 @@ app.listen(PORTT, () => console.log(`listening to PORT : ${PORTT}`));
 // [
 //   {
 //     "allPizzaBases": [
-//       {  "pizzaBase": "Thin Crust", "price": 10 },
+//       {  "pizzaBase": "Thin Crust", "price": 10 , "countInStock": 10 },
 //       {
 
 //         "pizzaBase": "Hand Tossed Crust",
-//         "price": 20
+//         "price": 20,
+//         "countInStock": 10
 //       },
-//       { "pizzaBase": "Handmade Crust", "price": 30 },
-//       { "pizzaBase": "Brooklyn Crust", "price": 40 },
-//       {  "pizzaBase": "Indian Crust", "price": 50 }
+//       { "pizzaBase": "Handmade Crust", "price": 30 , "countInStock": 10 },
+//       { "pizzaBase": "Brooklyn Crust", "price": 40 , "countInStock": 10 },
+//       {  "pizzaBase": "Indian Crust", "price": 50 , "countInStock": 10 }
 //     ]
 //   },
 //   {
 //     "allPizzaSauces": [
-//       { "pizzaSauce": "Pesto sauce", "price": 10 },
-//       {  "pizzaSauce": "Tomato sauce", "price": 20 },
-//       {  "pizzaSauce": "Hummus sauce", "price": 30 },
-//       {  "pizzaSauce": "Buffalo Sauce", "price": 40 },
-//       {  "pizzaSauce": "Green sauce", "price": 50 }
+//       { "pizzaSauce": "Pesto sauce", "price": 10 , "countInStock": 10 },
+//       {  "pizzaSauce": "Tomato sauce", "price": 20 , "countInStock": 10 },
+//       {  "pizzaSauce": "Hummus sauce", "price": 30 , "countInStock": 10 },
+//       {  "pizzaSauce": "Buffalo Sauce", "price": 40 , "countInStock": 10 },
+//       {  "pizzaSauce": "Green sauce", "price": 50 , "countInStock": 10 }
 //     ]
 //   },
 //   {
 //     "allPizzaCheese": [
-//       {  "pizzaCheese": "White Cheese", "price": 10 },
+//       {  "pizzaCheese": "White Cheese", "price": 10, "countInStock": 10 },
 //       {
 //         "pizzaCheese": "Yellow Cheese",
-//         "price": 20
+//         "price": 20,
+//         "countInStock": 10
 //       },
 //       {
 //         "pizzaCheese": "Mozzarella Cheese",
-//         "price": 30
+//         "price": 30,
+//         "countInStock": 10
 //       },
 //       {
 //         "pizzaCheese": "Gorgonzola Cheese",
-//         "price": 40
+//         "price": 40,
+//         "countInStock": 10
 //       }
 //     ]
 //   },
 
 //   {
 //     "allVeggies": [
-//       {  "veggies": "Onions", "price": 10 },
-//       {  "veggies": "Red onions", "price": 20 },
-//       {  "veggies": "fresh peppers", "price": 30 },
-//       {  "veggies": "Mushrooms", "price": 40 },
-//       {  "veggies": "Broccoli", "price": 50 },
-//       {  "veggies": "Roasted garlic", "price": 60 }
+//       {  "veggies": "Onions", "price": 10 , "countInStock": 10 },
+//       {  "veggies": "Red onions", "price": 20 , "countInStock": 10 },
+//       {  "veggies": "fresh peppers", "price": 30 , "countInStock": 10 },
+//       {  "veggies": "Mushrooms", "price": 40 , "countInStock": 10 },
+//       {  "veggies": "Broccoli", "price": 50 , "countInStock": 10 },
+//       {  "veggies": "Roasted garlic", "price": 60 , "countInStock": 10 }
 //     ]
 //   },
 
 //   {
 //     "allMeat": [
-//       {  "meat": "Italian sausage", "price": 10 },
-//       {  "meat": "Canadian bacon", "price": 20 },
-//       { "meat": "Indian chicken", "price": 30 }
+//       {  "meat": "Italian sausage", "price": 10 , "countInStock": 10 },
+//       {  "meat": "Canadian bacon", "price": 20 , "countInStock": 10 },
+//       { "meat": "Indian chicken", "price": 30 , "countInStock": 10 }
 //     ]
 //   }
 // ]
