@@ -487,6 +487,7 @@ app.get("/customPizza", async (req, res) => {
     .db("pizza-delevery")
     .collection("custom-pizza")
     .find({})
+    .sort({ _id: 1 })
     .toArray();
   res.send(data);
 });
