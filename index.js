@@ -416,13 +416,26 @@ app.post("/razorpay/verify", async (req, res) => {
     res.send({ message: "payment verified" });
 
     for (let i = 0; i < cart.length; i++) {
-      await client
-        .db("pizza-delevery")
-        .collection("products")
-        .updateOne(
-          { name: cart[i].name },
-          { $inc: { countInStock: -cart[i].quantity } }
-        );
+      if (!cart[i].isCustomPizza) {
+        await client
+          .db("pizza-delevery")
+          .collection("products")
+          .updateOne(
+            { name: cart[i].name },
+            { $inc: { countInStock: -cart[i].quantity } }
+          );
+      } else {
+        await client
+          .db("pizza-delevery")
+          .collection("custom-pizza")
+          .updateOne(
+            {
+              _id: new ObjectId("648bf2c2332f85a6e68873bd"),
+              "allPizzaBases.pizzaBase": cart[i].pizzaBase,
+            },
+            { $inc: { "allPizzaBases.$.countInStock": -1 } }
+          );
+      }
     }
   } else {
     res.status(401).send({ message: "invalid signature" });
