@@ -271,11 +271,76 @@ app.post("/razorpay/orders", async (req, res) => {
   let customPizzaPrice = 0;
   let totalPriceWithOutTax = 0;
   for (let i = 0; i < body.length; i++) {
-    const single = await client
-      .db("pizza-delevery")
-      .collection("products")
-      .findOne({ name: body[i].name });
-    customPizzaPrice += single.price * body[i].quantity;
+    if (!body[i].isCustomPizza) {
+      const single = await client
+        .db("pizza-delevery")
+        .collection("products")
+        .findOne({ name: body[i].name });
+      customPizzaPrice += single.price * body[i].quantity;
+    } else {
+      const customPizzaData = await client
+        .db("pizza-delevery")
+        .collection("custom-pizza")
+        .find({})
+        .sort({ _id: 1 })
+        .toArray();
+
+      const [
+        allPizzaBasesObj,
+        allPizzaSaucesObj,
+        allPizzaCheeseObj,
+        allVeggiesObj,
+        allMeatObj,
+      ] = customPizzaData;
+
+      const { allPizzaBases } = allPizzaBasesObj;
+
+      const { allPizzaSauces } = allPizzaSaucesObj;
+
+      const { allPizzaCheese } = allPizzaCheeseObj;
+
+      const { allVeggies } = allVeggiesObj;
+
+      const { allMeat } = allMeatObj;
+
+      const testRight = [];
+
+      for (let j = 0; j < allPizzaBases.length; j++) {
+        if (allPizzaBases[j].pizzaBase === body[i].pizzaBase) {
+          testRight.push(allPizzaBases[j]);
+        }
+      }
+
+      for (let j = 0; j < allPizzaSauces.length; j++) {
+        if (allPizzaSauces[j].pizzaSauce === body[i].pizzaSauce) {
+          testRight.push(allPizzaSauces[j]);
+        }
+      }
+
+      for (let j = 0; j < allPizzaCheese.length; j++) {
+        if (allPizzaCheese[j].pizzaCheese === body[i].pizzaCheese) {
+          testRight.push(allPizzaCheese[j]);
+        }
+      }
+
+      for (let j = 0; j < allVeggies.length; j++) {
+        for (let k = 2; k < body[i].veggies.length; k++) {
+          if (allVeggies[j].veggies === body[i].veggies[k]) {
+            testRight.push(allVeggies[j]);
+          }
+        }
+      }
+
+      for (let j = 0; j < allMeat.length; j++) {
+        for (let k = 1; k < body[i].meat.length; k++) {
+          if (allMeat[j].meat === body[i].meat[k]) {
+            testRight.push(allMeat[j]);
+          }
+        }
+      }
+
+      console.log(customPizzaData, testRight);
+    }
   }
 
   totalPriceWithOutTax = customPizzaPrice + readyMadePizzaPrice;
