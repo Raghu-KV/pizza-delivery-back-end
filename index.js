@@ -308,18 +308,21 @@ app.post("/razorpay/orders", async (req, res) => {
       for (let j = 0; j < allPizzaBases.length; j++) {
         if (allPizzaBases[j].pizzaBase === body[i].pizzaBase) {
           testRight.push(allPizzaBases[j]);
+          customPizzaPrice += allPizzaBases[j].price;
         }
       }
 
       for (let j = 0; j < allPizzaSauces.length; j++) {
         if (allPizzaSauces[j].pizzaSauce === body[i].pizzaSauce) {
           testRight.push(allPizzaSauces[j]);
+          customPizzaPrice += allPizzaSauces[j].price;
         }
       }
 
       for (let j = 0; j < allPizzaCheese.length; j++) {
         if (allPizzaCheese[j].pizzaCheese === body[i].pizzaCheese) {
           testRight.push(allPizzaCheese[j]);
+          customPizzaPrice += allPizzaCheese[j].price;
         }
       }
 
@@ -327,6 +330,7 @@ app.post("/razorpay/orders", async (req, res) => {
         for (let k = 2; k < body[i].veggies.length; k++) {
           if (allVeggies[j].veggies === body[i].veggies[k]) {
             testRight.push(allVeggies[j]);
+            customPizzaPrice += allVeggies[j].price;
           }
         }
       }
@@ -335,6 +339,7 @@ app.post("/razorpay/orders", async (req, res) => {
         for (let k = 1; k < body[i].meat.length; k++) {
           if (allMeat[j].meat === body[i].meat[k]) {
             testRight.push(allMeat[j]);
+            customPizzaPrice += allMeat[j].price;
           }
         }
       }
