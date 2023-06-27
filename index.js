@@ -267,14 +267,18 @@ app.post("/razorpay/orders", async (req, res) => {
   const body = req.body;
   console.log(body);
 
+  let readyMadePizzaPrice = 0;
+  let customPizzaPrice = 0;
   let totalPriceWithOutTax = 0;
   for (let i = 0; i < body.length; i++) {
     const single = await client
       .db("pizza-delevery")
       .collection("products")
       .findOne({ name: body[i].name });
-    totalPriceWithOutTax += single.price * body[i].quantity;
+    customPizzaPrice += single.price * body[i].quantity;
   }
+
+  totalPriceWithOutTax = customPizzaPrice + readyMadePizzaPrice;
 
   const calcGST = (totalPriceWithOutTax * 5) / 100;
   const amountWithGST = totalPriceWithOutTax + calcGST;
