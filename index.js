@@ -436,15 +436,26 @@ app.post("/razorpay/verify", async (req, res) => {
             { $inc: { "allPizzaBases.$.countInStock": -1 } }
           );
 
+        // await client
+        //   .db("pizza-delevery")
+        //   .collection("custom-pizza")
+        //   .updateOne(
+        //     {
+        //       _id: new ObjectId("648bf2c2332f85a6e68873c0"),
+        //       "allVeggies.veggies": cart[i].veggies,
+        //     },
+        //     { $inc: { "allVeggies.$.countInStock": -1 } }
+        //   );
+
         await client
           .db("pizza-delevery")
           .collection("custom-pizza")
           .updateOne(
             {
-              _id: new ObjectId("648bf2c2332f85a6e68873c0"),
-              "allVeggies.veggies": cart[i].veggies,
+              _id: new ObjectId("648bf2c2332f85a6e68873be"),
+              "allPizzaSauces.pizzaSauce": cart[i].pizzaSauce,
             },
-            { $inc: { "allVeggies.$.countInStock": -1 } }
+            { $inc: { "allPizzaSauces.$.countInStock": -1 } }
           );
 
         await client
@@ -453,7 +464,7 @@ app.post("/razorpay/verify", async (req, res) => {
           .updateOne(
             {
               _id: new ObjectId("648bf2c2332f85a6e68873bf"),
-              "allPizzaCheese.pizzaCheese": cart[i].cheese,
+              "allPizzaCheese.pizzaCheese": cart[i].pizzaCheese,
             },
             { $inc: { "allPizzaCheese.$.countInStock": -1 } }
           );
