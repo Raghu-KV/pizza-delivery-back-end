@@ -435,6 +435,28 @@ app.post("/razorpay/verify", async (req, res) => {
             },
             { $inc: { "allPizzaBases.$.countInStock": -1 } }
           );
+
+        await client
+          .db("pizza-delevery")
+          .collection("custom-pizza")
+          .updateOne(
+            {
+              _id: new ObjectId("648bf2c2332f85a6e68873c0"),
+              "allVeggies.veggies": cart[i].veggies,
+            },
+            { $inc: { "allVeggies.$.countInStock": -1 } }
+          );
+
+        await client
+          .db("pizza-delevery")
+          .collection("custom-pizza")
+          .updateOne(
+            {
+              _id: new ObjectId("648bf2c2332f85a6e68873bf"),
+              "allPizzaCheese.pizzaCheese": cart[i].cheese,
+            },
+            { $inc: { "allPizzaCheese.$.countInStock": -1 } }
+          );
       }
     }
   } else {
