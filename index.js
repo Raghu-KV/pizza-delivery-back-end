@@ -425,6 +425,7 @@ app.post("/razorpay/verify", async (req, res) => {
             { $inc: { countInStock: -cart[i].quantity } }
           );
       } else {
+        console.log(cart[i], "this is the cart sender as custom pizza");
         await client
           .db("pizza-delevery")
           .collection("custom-pizza")
@@ -435,17 +436,6 @@ app.post("/razorpay/verify", async (req, res) => {
             },
             { $inc: { "allPizzaBases.$.countInStock": -1 } }
           );
-
-        // await client
-        //   .db("pizza-delevery")
-        //   .collection("custom-pizza")
-        //   .updateOne(
-        //     {
-        //       _id: new ObjectId("648bf2c2332f85a6e68873c0"),
-        //       "allVeggies.veggies": cart[i].veggies,
-        //     },
-        //     { $inc: { "allVeggies.$.countInStock": -1 } }
-        //   );
 
         await client
           .db("pizza-delevery")
@@ -468,6 +458,34 @@ app.post("/razorpay/verify", async (req, res) => {
             },
             { $inc: { "allPizzaCheese.$.countInStock": -1 } }
           );
+
+        for (let j = 0; j < cart[i].veggies.length; j++) {
+          await client
+            .db("pizza-delevery")
+            .collection("custom-pizza")
+            .updateOne(
+              {
+                _id: new ObjectId("648bf2c2332f85a6e68873c0"),
+                "allVeggies.veggies": cart[i].veggies[j],
+              },
+              { $inc: { "allVeggies.$.countInStock": -1 } }
+            );
+        }
+
+        if (cart[i].meat) {
+          for (let j = 0; j < cart[i].meat.length; j++) {
+            await client
+              .db("pizza-delevery")
+              .collection("custom-pizza")
+              .updateOne(
+                {
+                  _id: new ObjectId("648bf2c2332f85a6e68873c1"),
+                  "allMeat.meat": cart[i].meat[j],
+                },
+                { $inc: { "allMeat.$.countInStock": -1 } }
+              );
+          }
+        }
       }
     }
   } else {
