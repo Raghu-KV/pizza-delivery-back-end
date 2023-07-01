@@ -725,6 +725,27 @@ app.delete("/deleteCustomMeat", auth, async (req, res) => {
   }
 });
 
+app.post("/addCustomBase", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873bd") },
+        { $push: { allPizzaBases: body } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
 //_____________________________________________________
 app.get("/customPizza", async (req, res) => {
   const data = await client
