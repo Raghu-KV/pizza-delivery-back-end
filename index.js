@@ -6,10 +6,10 @@ import bcrypt from "bcrypt";
 import { ObjectId } from "mongodb";
 import Razorpay from "razorpay";
 import crypto from "crypto";
-
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import { auth } from "./middleware/auth.js";
+
 const app = express();
 dotenv.config();
 const PORTT = process.env.PORT;
@@ -617,6 +617,111 @@ app.post("/changeStatus", auth, async (req, res) => {
     res.send({ message: "updated the status" });
   } else {
     res.status(401).send({ message: "your are unauthorized to do it" });
+  }
+});
+
+app.delete("/deleteCustomBase", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        {},
+        { $pull: { allPizzaBases: { pizzaBase: body.pizzaBaseName } } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
+app.delete("/deleteCustomSauce", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873be") },
+        { $pull: { allPizzaSauces: { pizzaSauce: body.pizzaSauceName } } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
+app.delete("/deleteCustomCheese", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873bf") },
+        { $pull: { allPizzaCheese: { pizzaCheese: body.pizzaCheeseName } } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
+app.delete("/deleteCustomVeggies", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873c0") },
+        { $pull: { allVeggies: { veggies: body.pizzaVeggiesName } } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
+app.delete("/deleteCustomMeat", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873c1") },
+        { $pull: { allMeat: { meat: body.pizzaMeatName } } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
   }
 });
 
