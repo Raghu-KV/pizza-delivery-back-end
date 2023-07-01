@@ -746,6 +746,89 @@ app.post("/addCustomBase", auth, async (req, res) => {
   }
 });
 
+app.post("/addCustomSauce", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873be") },
+        { $push: { allPizzaSauces: body } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
+app.post("/addCustomCheese", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873bf") },
+        { $push: { allPizzaCheese: body } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
+app.post("/addCustomVeggies", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873c0") },
+        { $push: { allVeggies: body } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
+
+app.post("/addCustomMeat", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    const test = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        { _id: new ObjectId("648bf2c2332f85a6e68873c1") },
+        { $push: { allMeat: body } }
+      );
+    console.log({ body: body, token: token });
+    res.send(test);
+  }
+});
 //_____________________________________________________
 app.get("/customPizza", async (req, res) => {
   const data = await client
