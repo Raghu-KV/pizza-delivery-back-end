@@ -860,7 +860,133 @@ app.post("/editCustomBase/:baseName", auth, async (req, res) => {
     res.send(responce);
   }
 });
+
+app.post("/editCustomSauce/:sauceName", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const { sauceName } = req.params;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    //console.log(baseName, body);
+    const responce = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        {
+          _id: new ObjectId("648bf2c2332f85a6e68873be"),
+          "allPizzaSauces.pizzaSauce": sauceName,
+        },
+        {
+          $set: {
+            "allPizzaSauces.$.pizzaSauce": body.pizzaSauce,
+            "allPizzaSauces.$.price": body.price,
+            "allPizzaSauces.$.countInStock": body.countInStock,
+          },
+        }
+      );
+    res.send(responce);
+  }
+});
+
+app.post("/editCustomCheese/:cheeseName", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const { cheeseName } = req.params;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    //console.log(baseName, body);
+    const responce = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        {
+          _id: new ObjectId("648bf2c2332f85a6e68873bf"),
+          "allPizzaCheese.pizzaCheese": cheeseName,
+        },
+        {
+          $set: {
+            "allPizzaCheese.$.pizzaCheese": body.pizzaCheese,
+            "allPizzaCheese.$.price": body.price,
+            "allPizzaCheese.$.countInStock": body.countInStock,
+          },
+        }
+      );
+    res.send(responce);
+  }
+});
+
+app.post("/editCustomVeggies/:veggiesName", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const { veggiesName } = req.params;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    //console.log(baseName, body);
+    const responce = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        {
+          _id: new ObjectId("648bf2c2332f85a6e68873c0"),
+          "allVeggies.veggies": veggiesName,
+        },
+        {
+          $set: {
+            "allVeggies.$.veggies": body.veggies,
+            "allVeggies.$.price": body.price,
+            "allVeggies.$.countInStock": body.countInStock,
+          },
+        }
+      );
+    res.send(responce);
+  }
+});
+
+app.post("/editCustomMeat/:meatName", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const { meatName } = req.params;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    //console.log(baseName, body);
+    const responce = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        {
+          _id: new ObjectId("648bf2c2332f85a6e68873c1"),
+          "allMeat.meat": meatName,
+        },
+        {
+          $set: {
+            "allMeat.$.meat": body.meat,
+            "allMeat.$.price": body.price,
+            "allMeat.$.countInStock": body.countInStock,
+          },
+        }
+      );
+    res.send(responce);
+  }
+});
+
 //_____________________________________________________
+
 app.get("/customPizza", async (req, res) => {
   const data = await client
     .db("pizza-delevery")
