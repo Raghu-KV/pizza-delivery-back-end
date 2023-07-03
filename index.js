@@ -829,6 +829,37 @@ app.post("/addCustomMeat", auth, async (req, res) => {
     res.send(test);
   }
 });
+
+app.post("/editCustomBase/:baseName", auth, async (req, res) => {
+  const token = req.header("x-auth-token");
+  const body = req.body;
+  const { baseName } = req.params;
+  const findUser = await client
+    .db("pizza-delevery")
+    .collection("users")
+    .findOne({ token: token });
+
+  if (findUser.isAdmin) {
+    console.log(baseName, body);
+    const responce = await client
+      .db("pizza-delevery")
+      .collection("custom-pizza")
+      .updateOne(
+        {
+          _id: new ObjectId("648bf2c2332f85a6e68873bd"),
+          "allPizzaBases.pizzaBase": baseName,
+        },
+        {
+          $set: {
+            "allPizzaBases.$.pizzaBase": body.pizzaBase,
+            "allPizzaBases.$.price": body.price,
+            "allPizzaBases.$.countInStock": body.countInStock,
+          },
+        }
+      );
+    res.send(responce);
+  }
+});
 //_____________________________________________________
 app.get("/customPizza", async (req, res) => {
   const data = await client
