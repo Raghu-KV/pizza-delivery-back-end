@@ -24,7 +24,7 @@ console.log("mongodb connected");
 app.use(express.json());
 app.use(cors());
 
-const BACK_END_URL = "http://localhost:4000";
+const BACK_END_URL = "https://pizza-delivery-back-end.vercel.app";
 const FRONT_END_URL = "https://tiny-fairy-95fba1.netlify.app";
 
 app.get("/", (req, res) => {
