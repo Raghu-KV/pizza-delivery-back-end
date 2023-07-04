@@ -25,10 +25,14 @@ app.use(express.json());
 app.use(cors());
 
 const BACK_END_URL = "http://localhost:4000";
-const FRONT_END_URL = "http://localhost:3000";
+const FRONT_END_URL = "https://tiny-fairy-95fba1.netlify.app";
 
 app.get("/", (req, res) => {
-  res.send({ message: "express working successfully" });
+  try {
+    res.send({ message: "express working successfully" });
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.get("/products", async (req, res) => {
